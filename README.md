@@ -13,9 +13,21 @@ Custom table layouts can be created by customizing cells and cell styles, and cu
 
 ## Preview
 
-| Demo List | Demo 1 | Demo 2 | Demo 3 |
-|-----------|--------|--------|--------|
-| ![Demo List](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview1.png) | ![Demo 1](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video1.gif) | ![Demo 2](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video2.gif) | ![Demo 3](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
+| Demo List |
+|-----------|
+| ![Demo List](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview1.png) |
+
+| Simple Demo |
+|-------------|
+| ![Simple Demo](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video1.gif) |
+
+| Advanced Demo |
+|---------------|
+| ![Advanced Demo](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video2.gif) |
+
+| JSON Export/Import Demo |
+|-------------------------|
+| ![JSON Export/Import Demo](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
 
 ## Core Features
 

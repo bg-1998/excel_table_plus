@@ -1,5 +1,10 @@
 # Excel Table Plus
 
+[![](https://img.shields.io/badge/excel__table__plus-0.0.1-blue)](https://pub.dartlang.org/packages/excel_table_plus)
+![](https://img.shields.io/badge/Awesome-Flutter-blue)
+![](https://img.shields.io/badge/Platform-Android_iOS_Web_Windows_MacOS_Linux-blue)
+![](https://img.shields.io/badge/License-MIT-blue)
+
 语言: 简体中文 | [English](README.md)
 
 一个功能增强的 Flutter Excel 风格表格组件，具有单元格合并、调整大小、样式设置等高级功能。该包提供了一个强大且可定制的表格组件，可用于创建类似 Excel 电子表格的复杂数据布局。
@@ -8,9 +13,21 @@
 
 ## 预览
 
-| 示例列表 | 示例1 | 示例2 | 示例3 |
-|---------|-------|-------|-------|
-| ![示例列表](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview1.png) | ![示例1](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video1.gif) | ![示例2](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video2.gif) | ![示例3](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
+| 示例列表 |
+|---------|
+| ![示例列表](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview1.png) |
+
+| 简易示例 |
+|---------|
+| ![简易示例](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video1.gif) |
+
+| 高级示例 |
+|---------|
+| ![高级示例](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video2.gif) |
+
+| JSON导出/导入示例 |
+|------------------|
+| ![JSON导出/导入示例](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
 
 ## 核心功能
 
