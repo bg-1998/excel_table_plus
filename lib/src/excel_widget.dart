@@ -308,6 +308,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
     double itemWidth = excel.itemWidth;
     double itemHeight = excel.itemHeight;
 
+    List<Map> mergeItems = [];
     for (int i = 0; i < excel.x; i++) {
       itemWidth = widget.controller.getColumnWidth(i);
       top = 0;
@@ -320,6 +321,8 @@ class _ExcelWidgetState extends State<ExcelWidget> {
           if (widgetItem != null) {
             widgets.add(widgetItem);
           }
+        } else if(model.isMergeCell){
+          mergeItems.add({'model': model,'x': i, 'y': j, 'left': left, 'top': top});
         }
         top += (itemHeight + excel.dividerWidth);
       }
@@ -394,24 +397,14 @@ class _ExcelWidgetState extends State<ExcelWidget> {
       }
     }
 
-    left = 0;
-    top = 0;
-    for (int i = 0; i < excel.x; i++) {
-      itemWidth = widget.controller.getColumnWidth(i);
-      top = 0;
-      for (int j = 0; j < excel.y; j++) {
-        itemHeight = widget.controller.getRowHeight(j);
-        var model = items.flutterExcelFirstWhereOrNull(
-                (e) => e.position.x == i && e.position.y == j);
-        if(model!=null&&model.isMergeCell){
-          Widget? widgetItem = _itemBuilder(excel, items, i, j, left, top, model: model);
-          if (widgetItem != null) {
-            widgets.add(widgetItem);
-          }
-        }
-        top += (itemHeight + excel.dividerWidth);
+    for (var e in mergeItems) {
+      Widget? widgetItem = _itemBuilder(excel, items,
+          e['x'], e['y'],
+          e['left'],
+          e['top'], model: e['model']);
+      if (widgetItem != null) {
+        widgets.add(widgetItem);
       }
-      left += (itemWidth + excel.dividerWidth);
     }
     return widgets;
   }
