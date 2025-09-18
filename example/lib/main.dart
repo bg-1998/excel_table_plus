@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'demo/advanced_excel_demo.dart';
 import 'demo/json_demo.dart';
 import 'demo/simple_excel_demo.dart';
+import 'demo/template_demo.dart';
 
 void main() {
   runApp(const MyApp());
@@ -69,6 +70,18 @@ class HomePage extends StatelessWidget {
               );
             },
           ),
+          // 添加多种风格模板示例导航
+          ListTile(
+            title: const Text('Template Demo'),
+            subtitle: const Text('表格模板样式演示'),
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (_) => const TemplateDemo(),
+                ),
+              );
+            }
+          )
         ],
       ),
     );

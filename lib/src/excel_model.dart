@@ -20,8 +20,12 @@ class ExcelModel {
   List<double> customColumnWidths;
   List<double> customRowHeights;
 
+  double selectedBorderWidth;// 选中单元格边框宽度
+  Color? selectedBorderColor;// 选中单元格边框颜色
   double dividerWidth; // 分割线宽度
+  double borderWidth; // 表格边线宽度
   double borderRadius; // 表格边线圆角
+  Color? borderColor; // 表格边线颜色
 
   Color? rowColor; // 行颜色
   Color? columnColor; // 列颜色
@@ -31,6 +35,7 @@ class ExcelModel {
   Color? intersectionColor; // 横竖交集的颜色
 
   bool isReadOnly; // 是否只读,此处为只读的时候,单元格的 isReadOnly 属性将无效
+  bool isEnableMultipleSelection; // 是否启用多选
 
   bool showSn; // 是否显示序号
   ExcelSnModel? sn; // 序号
@@ -45,8 +50,12 @@ class ExcelModel {
   /// [y] 纵轴坐标
   /// [itemWidth] 列宽
   /// [itemHeight] 行高
+  /// [selectedBorderWidth] 选中单元格边框宽度
+  /// [selectedBorderColor] 选中单元格边框颜色
   /// [dividerWidth] 分割线宽度
+  /// [borderWidth] 表格边线宽度
   /// [borderRadius] 表格边线圆角
+  /// [borderColor] 表格边线颜色
   /// [rowColor] 行颜色
   /// [columnColor] 列颜色
   /// [neighborColors] 邻格颜色
@@ -71,8 +80,12 @@ class ExcelModel {
     this.itemHeight = 36.0,
     List<double>? customColumnWidths,
     List<double>? customRowHeights,
+    this.selectedBorderWidth = 1.0,
+    this.selectedBorderColor,
     this.dividerWidth = 0.5,
+    this.borderWidth = 0.5,
     this.borderRadius = 0.0,
+    this.borderColor,
     this.rowColor,
     this.columnColor,
     this.backgroundColor,
@@ -80,6 +93,7 @@ class ExcelModel {
     this.showSn = false,
     ExcelSnModel? sn,
     this.isReadOnly = false,
+    this.isEnableMultipleSelection = true,
     this.intersectionColor,
     this.alignment = Alignment.centerLeft,
     this.resizable = false, // 默认不可调整
@@ -98,14 +112,19 @@ class ExcelModel {
     json['itemHeight'] = itemHeight;
     json['customColumnWidths'] = customColumnWidths;
     json['customRowHeights'] = customRowHeights;
+    json['selectedBorderWidth'] = selectedBorderWidth;
+    json['selectedBorderColor'] = selectedBorderColor?.value;
     json['dividerWidth'] = dividerWidth;
+    json['borderWidth'] = borderWidth;
     json['borderRadius'] = borderRadius;
+    json['borderColor'] = borderColor?.value;
     json['rowColor'] = rowColor?.value;
     json['columnColor'] = columnColor?.value;
     json['backgroundColor'] = backgroundColor?.value;
     json['dividerColor'] = dividerColor?.value;
     json['intersectionColor'] = intersectionColor?.value;
     json['isReadOnly'] = isReadOnly;
+    json['isEnableMultipleSelection'] = isEnableMultipleSelection;
     json['showSn'] = showSn;
     // 注意：sn (ExcelSnModel) 字段不包含在序列化中
     json['alignment'] = alignment.toString();
@@ -126,14 +145,19 @@ class ExcelModel {
       itemHeight: json['itemHeight'] as double,
       customColumnWidths: List<double>.from(json['customColumnWidths'] as List),
       customRowHeights: List<double>.from(json['customRowHeights'] as List),
+      selectedBorderWidth: json['selectedBorderWidth'] as double,
+      selectedBorderColor: json['selectedBorderColor'] != null ? Color(json['selectedBorderColor'] as int) : null,
       dividerWidth: json['dividerWidth'] as double,
       borderRadius: json['borderRadius'] as double,
+      borderWidth: json['borderWidth'] as double,
+      borderColor: json['borderColor'] != null ? Color(json['borderColor'] as int) : null,
       rowColor: json['rowColor'] != null ? Color(json['rowColor'] as int) : null,
       columnColor: json['columnColor'] != null ? Color(json['columnColor'] as int) : null,
       backgroundColor: Color(json['backgroundColor'] as int),
       dividerColor: json['dividerColor'] != null ? Color(json['dividerColor'] as int) : null,
       intersectionColor: json['intersectionColor'] != null ? Color(json['intersectionColor'] as int) : null,
       isReadOnly: json['isReadOnly'] as bool,
+      isEnableMultipleSelection: json['isEnableMultipleSelection'] as bool,
       showSn: json['showSn'] as bool,
       // 注意：sn (ExcelSnModel) 字段不包含在反序列化中
       alignment: alignment,

@@ -36,21 +36,14 @@ class _ExcelWidgetState extends State<ExcelWidget> {
   }
   
   @override
-  void didUpdateWidget(covariant ExcelWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    // 如果控制器发生变化，需要更新监听
-    if (oldWidget.controller != widget.controller) {
-      oldWidget.controller.removeListener(_onControllerChanged);
-      widget.controller.addListener(_onControllerChanged);
-    }
-  }
-  
-  @override
   void dispose() {
     // 移除监听器
     widget.controller.removeListener(_onControllerChanged);
-    // 停止自动滚动定时器
-    widget.controller.dispose();
+    if(widget.controller.isAutoDispose){
+      widget.controller.dispose();
+    } else {
+      widget.controller.stopAutoScrollTimer();
+    }
     super.dispose();
   }
   
@@ -67,8 +60,6 @@ class _ExcelWidgetState extends State<ExcelWidget> {
   Widget build(BuildContext context) {
     final excel = widget.controller.excel;
     final items = widget.controller.items;
-    final excelWidth = widget.controller.excelWidth;
-    final excelHeight = widget.controller.excelHeight;
 
     // 数据校验
     if (excel.x <= 0 || excel.y <= 0) {
@@ -130,13 +121,17 @@ class _ExcelWidgetState extends State<ExcelWidget> {
         final screenSize = Size(constraints.maxWidth, constraints.maxHeight);
         snW = (excel.sn?.itemWidth ?? excel.itemWidth) + excel.dividerWidth;
         snH = (excel.sn?.itemHeight ?? excel.itemHeight) + excel.dividerWidth;
-        final constraintWidth = excelWidth ?? screenSize.width;
-        final constraintHeight = excelHeight ?? screenSize.height;
-        final totalExcelWidth = widget.controller.getExcelWidth();
-        final totalExcelHeight = widget.controller.getExcelHeight();
-        double width =totalExcelWidth;
+        final constraintWidth = screenSize.width;
+        final constraintHeight = screenSize.height;
+        widget.controller.excelWidth = widget.controller.getExcelWidth();
+        widget.controller.excelHeight = widget.controller.getExcelHeight();
+        double totalExcelWidth = widget.controller.excelWidth;
+        double totalExcelHeight = widget.controller.excelHeight;
+        double width = totalExcelWidth;
         double height = totalExcelHeight;
         if(excel.showSn){
+          totalExcelWidth += snW;
+          totalExcelHeight += snH;
           if(width>constraintWidth){
             width += snW;
           }
@@ -148,9 +143,10 @@ class _ExcelWidgetState extends State<ExcelWidget> {
           snH = 0;
         }
         return SizedBox(
-          width: min(totalExcelWidth+snW, constraintWidth),
-          height: min(totalExcelHeight+snH, constraintHeight),
+          width: min(totalExcelWidth, constraintWidth),
+          height: min(totalExcelHeight, constraintHeight),
           child: Stack(
+            clipBehavior: Clip.none,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(excel.borderRadius),
@@ -159,20 +155,20 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                     thickness: WidgetStatePropertyAll(0.0),
                   ),
                   child: SizedBox(
-                    width: min(totalExcelWidth+snW, constraintWidth),
-                    height: min(totalExcelHeight+snH, constraintHeight),
+                    width: min(totalExcelWidth, constraintWidth),
+                    height: min(totalExcelHeight, constraintHeight),
                     child: Stack(
                       children: [
                         Positioned(
-                          left: snW,
-                          top: excel.dividerWidth,
+                          left: snW - excel.dividerWidth,
+                          top: 0,
                           child: SizedBox(
-                            width: min(totalExcelWidth+snW, constraintWidth),
+                            width: min(totalExcelWidth, constraintWidth) - (snW - excel.dividerWidth),
                             height: snH,
                             child: ListView.builder(
                               scrollDirection: Axis.horizontal,
                               controller: widget.controller.snHorizontalController,
-                              padding: EdgeInsets.only(right: snW,),
+                              padding: EdgeInsets.zero,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: excel.showSn ? excel.x : 0,
                               itemBuilder: _buildHorizontalSnLineItems,
@@ -180,14 +176,14 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                           ),
                         ),
                         Positioned(
-                          top: snH,
-                          left: excel.dividerWidth,
+                          top: snH - excel.dividerWidth,
+                          left: 0,
                           child: SizedBox(
                             width: snW,
-                            height: min(totalExcelHeight+snH, constraintHeight),
+                            height: min(totalExcelHeight, constraintHeight) - (snH - excel.dividerWidth),
                             child: ListView.builder(
                               controller: widget.controller.snVerticalController,
-                              padding: EdgeInsets.only(bottom: snH),
+                              padding: EdgeInsets.zero,
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: excel.showSn ? excel.y : 0,
                               itemBuilder: _buildVerticalSnLineItems,
@@ -195,15 +191,15 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                           ),
                         ),
                         Positioned(
-                          left: excel.showSn ? snW + excel.dividerWidth : excel.dividerWidth,
-                          top: excel.showSn ? snH + excel.dividerWidth: excel.dividerWidth,
+                          left: excel.showSn ? snW : 0,
+                          top: excel.showSn ? snH: 0,
                           child: SizedBox(
-                            height: min(totalExcelHeight+snH, constraintHeight),
+                            height: min(widget.controller.excelHeight, constraintHeight),
                             child: SingleChildScrollView(
                               physics: const ClampingScrollPhysics(),
                               controller: widget.controller.excelVerticalController,
                               child: SizedBox(
-                                width: min(totalExcelWidth+snW, constraintWidth),
+                                width: min(widget.controller.excelWidth, constraintWidth),
                                 child: SingleChildScrollView(
                                   physics: const ClampingScrollPhysics(),
                                   controller: widget.controller.excelHorizontalController,
@@ -211,12 +207,10 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                                   child: GestureDetector(
                                     onPanStart: widget.controller.onPanStart,
                                     onPanUpdate: (details) {
-                                      final areaSize = Size(min(totalExcelWidth, constraintWidth), min(totalExcelHeight, constraintHeight));
+                                      final areaSize = Size(min(widget.controller.excelWidth, constraintWidth), min(widget.controller.excelHeight, constraintHeight));
                                       widget.controller.onPanUpdate(details,areaSize);
                                     },
-                                    onPanEnd: (details) {
-                                      widget.controller.onPanEnd(details);
-                                    },
+                                    onPanEnd: widget.controller.onPanEnd,
                                     child: Stack(
                                       children: [
                                         Container(
@@ -249,11 +243,11 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                                                       height: widget.controller.selectionRect!.height,
                                                       decoration: BoxDecoration(
                                                         border: Border.all(
-                                                            color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
-                                                            width: excel.dividerWidth*2,
+                                                            color: excel.selectedBorderColor??Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                                                            width: excel.selectedBorderWidth,
                                                             strokeAlign: BorderSide.strokeAlignInside
                                                         ),
-                                                        color: Theme.of(context).primaryColor.withValues(alpha: 0.1),
+                                                        color: (excel.selectedBorderColor??Theme.of(context).primaryColor).withValues(alpha: 0.1),
                                                       ),
                                                     ),
                                                   ),
@@ -276,14 +270,14 @@ class _ExcelWidgetState extends State<ExcelWidget> {
               ),
               IgnorePointer(
                 child: Container(
-                  width: min(totalExcelWidth+snW, constraintWidth),
-                  height: min(totalExcelHeight+snH, constraintHeight),
+                  width: min(totalExcelWidth, constraintWidth),
+                  height: min(totalExcelHeight, constraintHeight),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(excel.borderRadius),
                     border: Border.all(
-                      color: (excel.sn?.dividerColor ?? excel.dividerColor)??Colors.transparent,
-                      width: excel.dividerWidth,
-                      strokeAlign: BorderSide.strokeAlignInside,
+                      color: (excel.borderColor ?? excel.dividerColor)??Colors.transparent,
+                      width: excel.borderWidth,
+                      strokeAlign: BorderSide.strokeAlignOutside,
                     ),
                   ),
                 ),
@@ -347,7 +341,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                 axis: ExcelLineAxis.vertical,
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
-                length: totalHeight,
+                length: totalHeight - excel.dividerWidth,
                 resizable: excel.resizable && i > 0,
                 index: i,
                 onResize: excel.resizable && i > 0
@@ -380,7 +374,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
               child: ExcelLine(
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
-                length: totalWidth,
+                length: totalWidth - excel.dividerWidth,
                 axis: ExcelLineAxis.horizontal,
                 resizable: excel.resizable && i > 0,
                 index: i,
@@ -491,14 +485,14 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                   Positioned(right: -excel.dividerWidth,child: IgnorePointer(
                     child: Container(
                       width: excel.dividerWidth,
-                      height: height,
+                      height: height + (y<excel.y-1?excel.dividerWidth:0),
                       color: excel.dividerColor??Colors.transparent,
                     ),
                   )),
                 if(y<excel.y-1)
                   Positioned(bottom: -excel.dividerWidth,child: IgnorePointer(
                     child: Container(
-                      width: width+excel.dividerWidth,
+                      width: width+(x<excel.x-1?excel.dividerWidth:0),
                       height: excel.dividerWidth,
                       color: excel.dividerColor??Colors.transparent,
                     ),
@@ -510,8 +504,8 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                     decoration: (widget.controller.selectedPosition == position ||
                         (isSelectsContains&&widget.controller.isMultiSelecting))?BoxDecoration(
                       border: Border.all(
-                        color: Theme.of(context).primaryColor.withValues(alpha: 0.8),
-                        width: excel.dividerWidth*2,
+                        color: excel.selectedBorderColor??Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                        width: excel.selectedBorderWidth,
                         strokeAlign: BorderSide.strokeAlignInside,
                       ),
                     ):null,
@@ -589,7 +583,7 @@ extension FlutterExcelSnWidget on _ExcelWidgetState {
           excel,
           index,
           width: snW,
-          height: itemHeight+(index == (excel.y-1)?excel.dividerWidth:0),
+          height: itemHeight,
           dividerColor: dividerColor,
           alignment: Alignment.center,
         ),
@@ -627,7 +621,7 @@ extension FlutterExcelSnWidget on _ExcelWidgetState {
           excel,
           index,
           height: snH,
-          width: itemWidth+(index == (excel.x-1)?excel.dividerWidth:0),
+          width: itemWidth,
           dividerColor: dividerColor,
           convert: true,
           alignment: Alignment.center,

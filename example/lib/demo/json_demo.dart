@@ -31,6 +31,7 @@ class _JsonDemoState extends State<JsonDemo> {
       dividerWidth: 1.0,
       resizable: true,
       borderRadius: 8.0,
+      borderWidth: 2
     );
 
     // 创建包含不同类型单元格的数据
@@ -204,12 +205,16 @@ class _JsonDemoState extends State<JsonDemo> {
               ))
           .toList();
 
+      //两种方式一种直接重新创建ExcelController，一种直接设置setExcel、setItems
+      //第一种方式注意要给ExcelWidget按照ExcelController哈希值设置 key
       setState(() {
         _controller = ExcelController(
           excel: excel,
           items: items,
         );
       });
+      // _controller.setExcel(excel);
+      // _controller.setItems(items);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('数据导入成功')),
@@ -256,6 +261,7 @@ class _JsonDemoState extends State<JsonDemo> {
             Expanded(
               flex: 3,
               child: ExcelWidget(
+                key: Key('excel${_controller.hashCode.toString()}'),
                 controller: _controller,
                 itemBuilder: (x, y, item) {
                   if (item != null) {

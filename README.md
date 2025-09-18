@@ -1,6 +1,6 @@
 # Excel Table Plus
 
-[![](https://img.shields.io/badge/excel__table__plus-0.0.1-blue)](https://pub.dartlang.org/packages/excel_table_plus)
+[![](https://img.shields.io/badge/excel__table__plus-0.0.2-blue)](https://pub.dartlang.org/packages/excel_table_plus)
 ![](https://img.shields.io/badge/Awesome-Flutter-blue)
 ![](https://img.shields.io/badge/Platform-Android_iOS_Web_Windows_MacOS_Linux-blue)
 ![](https://img.shields.io/badge/License-MIT-blue)
@@ -28,6 +28,10 @@ Custom table layouts can be created by customizing cells and cell styles, and cu
 | JSON Export/Import Demo |
 |-------------------------|
 | ![JSON Export/Import Demo](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
+
+| Template Demo |
+|------------------|
+| ![Template Demo](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview2.png) |
 
 ## Core Features
 
@@ -65,7 +69,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  excel_table_plus: ^0.0.1
+  excel_table_plus: ^latest
 ```
 
 ### Install
@@ -281,13 +285,24 @@ Main configuration for the Excel table:
 - `itemHeight` - Default row height
 - `customColumnWidths` - Custom widths for specific columns
 - `customRowHeights` - Custom heights for specific rows
-- `dividerWidth` - Width of cell borders
+- `selectedBorderWidth` - Selected cell border width
+- `selectedBorderColor` - Selected cell border color
+- `dividerWidth` - Width of cell dividers
+- `borderWidth` - Table border width
 - `borderRadius` - Corner radius for the table
-- `resizable` - Enable/disable resizing functionality
-- `showSn` - Show/hide serial numbers
-- `backgroundColor` - Table background color
+- `borderColor` - Table border color
 - `rowColor` - Background color for rows
 - `columnColor` - Background color for columns
+- `backgroundColor` - Table background color
+- `dividerColor` - Divider color
+- `intersectionColor` - Intersection color of horizontal and vertical lines
+- `isReadOnly` - Whether the table is read-only. When set to read-only, the isReadOnly property of cells will be invalid
+- `isEnableMultipleSelection` - Whether to enable multiple selection
+- `showSn` - Show/hide serial numbers
+- `sn` - Serial number configuration
+- `alignment` - Alignment
+- `resizable` - Enable/disable resizing functionality
+- `resizeAreaSize` - Resize area size (in pixels)
 
 #### ExcelItemModel
 
@@ -310,6 +325,9 @@ Controller for managing table state and operations:
 - Handles cell merging operations
 - Enables event callback registration
 - Supports finding items at specific positions
+- Supports inserting and deleting rows and columns
+- Supports multiple selection and range selection
+- Supports resizing rows and columns
 
 ## Example Projects
 
@@ -318,7 +336,7 @@ The package includes comprehensive examples demonstrating various implementation
 1. **Simple Demo** - Basic usage with simple data
 2. **Advanced Demo** - Complex usage with different cell types (text, number, date, dropdown)
 3. **JSON Export/Import Demo** - Demonstrates exporting and importing table data with custom cell models
-4. **Multiple Examples** - Various configuration examples
+4. **Template Demo** - Various table style template examples
 
 Run the example project:
 

@@ -1,6 +1,6 @@
 # Excel Table Plus
 
-[![](https://img.shields.io/badge/excel__table__plus-0.0.1-blue)](https://pub.dartlang.org/packages/excel_table_plus)
+[![](https://img.shields.io/badge/excel__table__plus-0.0.2-blue)](https://pub.dartlang.org/packages/excel_table_plus)
 ![](https://img.shields.io/badge/Awesome-Flutter-blue)
 ![](https://img.shields.io/badge/Platform-Android_iOS_Web_Windows_MacOS_Linux-blue)
 ![](https://img.shields.io/badge/License-MIT-blue)
@@ -28,6 +28,10 @@
 | JSON导出/导入示例 |
 |------------------|
 | ![JSON导出/导入示例](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview_video3.gif) |
+
+| 表格模板样式演示 |
+|------------------|
+| ![表格模板样式演示](https://raw.githubusercontent.com/bg-1998/excel_table_plus/main/preview/preview2.png) |
 
 ## 核心功能
 
@@ -65,7 +69,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  excel_table_plus: ^0.0.1
+  excel_table_plus: ^latest
 ```
 
 ### 安装到项目中
@@ -281,13 +285,24 @@ void importTableData(Map<String, dynamic> json) {
 - `itemHeight` - 默认行高
 - `customColumnWidths` - 特定列的自定义宽度
 - `customRowHeights` - 特定行的自定义高度
-- `dividerWidth` - 单元格边框宽度
-- `borderRadius` - 表格圆角
-- `resizable` - 启用/禁用调整大小功能
-- `showSn` - 显示/隐藏序号
-- `backgroundColor` - 表格背景色
+- `selectedBorderWidth` - 选中单元格边框宽度
+- `selectedBorderColor` - 选中单元格边框颜色
+- `dividerWidth` - 分割线宽度
+- `borderWidth` - 表格边线宽度
+- `borderRadius` - 表格边线圆角
+- `borderColor` - 表格边线颜色
 - `rowColor` - 行背景色
 - `columnColor` - 列背景色
+- `backgroundColor` - 表格背景色
+- `dividerColor` - 分割线颜色
+- `intersectionColor` - 横竖交集的颜色
+- `isReadOnly` - 是否只读，此处为只读的时候，单元格的 isReadOnly 属性将无效
+- `isEnableMultipleSelection` - 是否启用多选
+- `showSn` - 显示/隐藏序号
+- `sn` - 序号配置
+- `alignment` - 对齐方式
+- `resizable` - 启用/禁用调整大小功能
+- `resizeAreaSize` - 调整区域大小（像素）
 
 #### ExcelItemModel
 
@@ -310,6 +325,9 @@ void importTableData(Map<String, dynamic> json) {
 - 处理单元格合并操作
 - 支持事件回调注册
 - 支持查找指定位置的项
+- 支持行列的插入和删除
+- 支持多选和框选功能
+- 支持行列宽高调整
 
 ## 示例项目
 
@@ -318,7 +336,7 @@ void importTableData(Map<String, dynamic> json) {
 1. **简单示例** - 基本用法和简单数据
 2. **高级示例** - 复杂用法，包含不同类型的单元格（文本、数字、日期、下拉框）
 3. **JSON导出/导入示例** - 演示如何导出和导入带有自定义单元格模型的表格数据
-4. **多个示例** - 各种配置示例
+4. **模板示例** - 各种表格样式模板示例
 
 运行示例项目：
 

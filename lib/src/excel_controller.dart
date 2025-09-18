@@ -25,12 +25,13 @@ class ExcelController extends ChangeNotifier {
   List<ExcelItemModel>? startScaleItems;
 
   /// Excel宽度
-  double? _excelWidth;
-  double? get excelWidth => _excelWidth;
+  double excelWidth = 0.0;
 
   /// Excel高度
-  double? _excelHeight;
-  double? get excelHeight => _excelHeight;
+  double excelHeight = 0.0;
+
+  /// 是否自动销毁控制器
+  bool isAutoDispose;
 
   /// 选中的单元格位置
   ExcelPosition? _selectedPosition;
@@ -78,20 +79,17 @@ class ExcelController extends ChangeNotifier {
   /// 多选变化回调
   Function(List<ExcelPosition> selectedItems)? onMultiSelectionChanged;
 
-  final ScrollController snHorizontalController = ScrollController();
-  final ScrollController snVerticalController = ScrollController();
-  final ScrollController excelHorizontalController = ScrollController();
-  final ScrollController excelVerticalController = ScrollController();
+  ScrollController snHorizontalController = ScrollController();
+  ScrollController snVerticalController = ScrollController();
+  ScrollController excelHorizontalController = ScrollController();
+  ScrollController excelVerticalController = ScrollController();
 
   ExcelController({
     required ExcelModel excel,
     List<ExcelItemModel>? items,
-    double? excelWidth,
-    double? excelHeight,
+    this.isAutoDispose = true,
   })  : _excel = excel,
-        _items = items ?? [],
-        _excelWidth = excelWidth,
-        _excelHeight = excelHeight;
+        _items = items ?? [];
 
   /// 设置Excel模型
   void setExcel(ExcelModel excel) {
@@ -126,18 +124,6 @@ class ExcelController extends ChangeNotifier {
     update();
   }
 
-  /// 设置Excel宽度
-  void setExcelWidth(double? width) {
-    _excelWidth = width;
-    update();
-  }
-
-  /// 设置Excel高度
-  void setExcelHeight(double? height) {
-    _excelHeight = height;
-    update();
-  }
-
   ///执行刷新
   void update(){
     notifyListeners();
@@ -146,7 +132,7 @@ class ExcelController extends ChangeNotifier {
   /// 释放资源
   @override
   void dispose() {
-    _stopAutoScrollTimer();
+    stopAutoScrollTimer();
     super.dispose();
   }
 }
@@ -191,6 +177,9 @@ extension ExcelDataController on ExcelController {
 
   /// 选择整行
   void selectEntireRow(int rowIndex) {
+    if(!excel.isEnableMultipleSelection){
+      return;
+    }
     // 清除之前的选中状态
     _selectedItems.clear();
     _selectedPosition = null;
@@ -220,6 +209,9 @@ extension ExcelDataController on ExcelController {
 
   /// 选择整列
   void selectEntireColumn(int columnIndex) {
+    if(!excel.isEnableMultipleSelection){
+      return;
+    }
     // 清除之前的选中状态
     _selectedItems.clear();
     _selectedPosition = null;
@@ -256,7 +248,7 @@ extension ExcelSizeController on ExcelController{
       double itemWidth = getColumnWidth(i);
       width += (itemWidth + excel.dividerWidth);
     }
-    width += excel.dividerWidth;
+    width -= excel.dividerWidth;
     return width;
   }
 
@@ -267,7 +259,7 @@ extension ExcelSizeController on ExcelController{
       double itemHeight = getRowHeight(i);
       height += (itemHeight + excel.dividerWidth);
     }
-    height += excel.dividerWidth;
+    height -= excel.dividerWidth;
     return height;
   }
 
@@ -325,6 +317,9 @@ extension GestureDragController on ExcelController{
 
   /// 处理拖拽开始
   void onPanStart(DragStartDetails details) {
+    if(!excel.isEnableMultipleSelection){
+      return;
+    }
     _selectedPosition = null;
     _isMultiSelecting = true;
     _startPoint = details.localPosition;
@@ -352,7 +347,7 @@ extension GestureDragController on ExcelController{
   /// 处理拖拽结束
   void onPanEnd(DragEndDetails details) {
     // 停止自动滚动定时器
-    _stopAutoScrollTimer();
+    stopAutoScrollTimer();
     if (!_isMultiSelecting) return;
     _isMultiSelecting = false;
     if(_selectStartOffset!=null&&_selectEndOffset!=null){
@@ -852,7 +847,7 @@ extension AutoScrollController on ExcelController {
         _performAutoScroll();
       });
     } else {
-      _stopAutoScrollTimer();
+      stopAutoScrollTimer();
       _lastPoint = _currentPoint;
       _selectionRect = Rect.fromPoints(_startPoint!, _lastPoint!);
       _calculateSelectedCells();
@@ -861,7 +856,7 @@ extension AutoScrollController on ExcelController {
   }
   
   /// 停止自动滚动定时器
-  void _stopAutoScrollTimer() {
+  void stopAutoScrollTimer() {
     _autoScrollTimer?.cancel();
     _autoScrollTimer = null;
   }
@@ -914,7 +909,7 @@ extension AutoScrollController on ExcelController {
 
     // 如果没有滚动，则停止定时器
     if (!scrolled) {
-      _stopAutoScrollTimer();
+      stopAutoScrollTimer();
     }
     _lastPoint = _currentPoint;
     _selectionRect = Rect.fromPoints(_startPoint!, _lastPoint!);
