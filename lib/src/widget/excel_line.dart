@@ -13,8 +13,9 @@ enum DragState {
   ended
 }
 
-class ExcelLine extends StatelessWidget {
+class ExcelLine extends StatefulWidget {
   final Color? color;
+  final Color? highlightColor;
   final double prefix;
   final double suffix;
   final ExcelLineAxis axis;
@@ -30,6 +31,7 @@ class ExcelLine extends StatelessWidget {
 
   ///
   /// [color] divider color
+  /// [highlightColor] divider highlight color
   /// [prefix] prefix spacing
   /// [suffix] suffix spacing
   /// [axis] axis
@@ -40,8 +42,9 @@ class ExcelLine extends StatelessWidget {
   /// [onDragStateChanged] 拖拽状态改变回调
   /// [index] 索引
   ExcelLine({
-    Key? key,
+    super.key,
     Color? color,
+    this.highlightColor,
     this.prefix = 0.0,
     this.suffix = 0.0,
     this.axis = ExcelLineAxis.horizontal,
@@ -51,13 +54,20 @@ class ExcelLine extends StatelessWidget {
     this.onResize,
     this.onDragStateChanged,
     this.index = 0,
-  })  : color = color ?? const Color(0xFFEFEFEF).withValues(alpha: 0.6),
-        super(key: key);
+  })  : color = color ?? const Color(0xFFEFEFEF).withValues(alpha: 0.6);
+
+  @override
+  State<ExcelLine> createState() => _ExcelLineState();
+}
+
+class _ExcelLineState extends State<ExcelLine> {
+  // 添加鼠标悬浮状态
+  bool _onHover = false;
 
   @override
   Widget build(BuildContext context) {
     Widget line;
-    switch (axis) {
+    switch (widget.axis) {
       case ExcelLineAxis.horizontal:
         line = _buildHorizontalLine();
         break;
@@ -65,41 +75,57 @@ class ExcelLine extends StatelessWidget {
         line = _buildVerticalLine();
         break;
     }
-    
+
     // 如果支持调整大小，则包装一个可以拖拽的区域
-    if (resizable) {
+    if (widget.resizable) {
       return _buildResizableLine(context, line);
     }
-    
+
     return line;
   }
 
   Widget _buildResizableLine(BuildContext context, Widget line) {
     return MouseRegion(
-      cursor: axis == ExcelLineAxis.vertical
+      cursor: widget.axis == ExcelLineAxis.vertical
         ? SystemMouseCursors.resizeColumn
         : SystemMouseCursors.resizeRow,
+      onHover: (event) {
+        setState(() {
+          _onHover = true;
+        });
+      },
+      onExit: (event) {
+        setState(() {
+          _onHover = false;
+        });
+      },
       child: GestureDetector(
         behavior: HitTestBehavior.translucent,
         onPanStart: (details) {
+          setState(() {
+            _onHover = true;
+          });
           // 开始拖拽
-          if (onDragStateChanged != null) {
-            onDragStateChanged!(DragState.started, axis);
+          if (widget.onDragStateChanged != null) {
+            widget.onDragStateChanged!(DragState.started, widget.axis);
           }
         },
         onPanUpdate: (details) {
           // 更新拖拽
-          if (onResize != null) {
-            double delta = axis == ExcelLineAxis.vertical
+          if (widget.onResize != null) {
+            double delta = widget.axis == ExcelLineAxis.vertical
               ? details.delta.dx
               : details.delta.dy;
-            onResize!(delta);
+            widget.onResize!(delta);
           }
         },
         onPanEnd: (details) {
+          setState(() {
+            _onHover = false;
+          });
           // 结束拖拽
-          if (onDragStateChanged != null) {
-            onDragStateChanged!(DragState.ended, axis);
+          if (widget.onDragStateChanged != null) {
+            widget.onDragStateChanged!(DragState.ended, widget.axis);
           }
         },
         child: Container(
@@ -112,35 +138,35 @@ class ExcelLine extends StatelessWidget {
   }
 
   Widget _buildVerticalLine() {
-    double height = length;
-    height = height - prefix - suffix;
+    double height = widget.length;
+    height = height - widget.prefix - widget.suffix;
     height = max(0.0, height);
     return SizedBox(
-      width: thickness,
+      width: widget.thickness,
       height: height,
       child: VerticalDivider(
-        color: color,
-        thickness: thickness,
-        width: thickness,
-        indent: prefix,
-        endIndent: suffix,
+        color: _onHover? widget.highlightColor??widget.color:widget.color,
+        thickness: widget.thickness,
+        width: widget.thickness,
+        indent: widget.prefix,
+        endIndent: widget.suffix,
       ),
     );
   }
 
   Widget _buildHorizontalLine() {
-    double width = length;
-    width = width - prefix - suffix;
+    double width = widget.length;
+    width = width - widget.prefix - widget.suffix;
     width = max(0.0, width);
     return SizedBox(
       width: width,
-      height: thickness,
+      height: widget.thickness,
       child: Divider(
-        thickness: thickness,
-        height: thickness,
-        color: color,
-        indent: prefix,
-        endIndent: suffix,
+        thickness: widget.thickness,
+        height: widget.thickness,
+        color: _onHover? widget.highlightColor??widget.color:widget.color,
+        indent: widget.prefix,
+        endIndent: widget.suffix,
       ),
     );
   }

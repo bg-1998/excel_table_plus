@@ -230,28 +230,30 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                                               widget.controller.clearMultipleSelected();
                                             },
                                             behavior: HitTestBehavior.translucent,
-                                            child: SizedBox(
-                                              width: width,
-                                              height: height,
-                                              child: Stack(
-                                                children: [
-                                                  Positioned(
-                                                    left: widget.controller.selectionRect!.left,
-                                                    top: widget.controller.selectionRect!.top,
-                                                    child: Container(
-                                                      width: widget.controller.selectionRect!.width,
-                                                      height: widget.controller.selectionRect!.height,
-                                                      decoration: BoxDecoration(
-                                                        border: Border.all(
-                                                            color: excel.selectedBorderColor??Theme.of(context).primaryColor.withValues(alpha: 0.8),
-                                                            width: excel.selectedBorderWidth,
-                                                            strokeAlign: BorderSide.strokeAlignInside
+                                            child: IgnorePointer(
+                                              child: SizedBox(
+                                                width: width,
+                                                height: height,
+                                                child: Stack(
+                                                  children: [
+                                                    Positioned(
+                                                      left: widget.controller.selectionRect!.left,
+                                                      top: widget.controller.selectionRect!.top,
+                                                      child: Container(
+                                                        width: widget.controller.selectionRect!.width,
+                                                        height: widget.controller.selectionRect!.height,
+                                                        decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color: excel.selectedBorderColor??Theme.of(context).primaryColor.withValues(alpha: 0.8),
+                                                              width: excel.selectedBorderWidth,
+                                                              strokeAlign: BorderSide.strokeAlignInside
+                                                          ),
+                                                          color: (excel.selectedBorderColor??Theme.of(context).primaryColor).withValues(alpha: 0.1),
                                                         ),
-                                                        color: (excel.selectedBorderColor??Theme.of(context).primaryColor).withValues(alpha: 0.1),
                                                       ),
                                                     ),
-                                                  ),
-                                                ],
+                                                  ],
+                                                ),
                                               ),
                                             ),
                                           ),
@@ -341,6 +343,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                 axis: ExcelLineAxis.vertical,
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
+                highlightColor: excel.selectedBorderColor??Theme.of(context).primaryColor,
                 length: totalHeight - excel.dividerWidth,
                 resizable: excel.resizable && i > 0,
                 index: i,
@@ -374,6 +377,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
               child: ExcelLine(
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
+                highlightColor: excel.selectedBorderColor??Theme.of(context).primaryColor,
                 length: totalWidth - excel.dividerWidth,
                 axis: ExcelLineAxis.horizontal,
                 resizable: excel.resizable && i > 0,
