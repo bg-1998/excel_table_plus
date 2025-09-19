@@ -139,9 +139,9 @@ class _TemplateDemoState extends State<TemplateDemo> {
     final excelModel = ExcelModel(
       x: x,
       y: y,
-      itemWidth: 90.0, // 列宽180
-      itemHeight: 40.0, // 行高80
-      showSn: false, // 显示序号
+      itemWidth: 90.0,
+      itemHeight: 40.0,
+      showSn: false,
       backgroundColor: backgroundColor ?? Colors.white,
       rowColor: rowColor,
       columnColor: columnColor,
