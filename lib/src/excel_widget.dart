@@ -205,12 +205,12 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                                   controller: widget.controller.excelHorizontalController,
                                   scrollDirection: Axis.horizontal,
                                   child: GestureDetector(
-                                    onPanStart: widget.controller.onPanStart,
-                                    onPanUpdate: (details) {
+                                    onPanStart: widget.controller.selectedPosition!=null?widget.controller.onPanStart:null,
+                                    onPanUpdate: widget.controller.selectedPosition!=null?(details) {
                                       final areaSize = Size(min(widget.controller.excelWidth, constraintWidth), min(widget.controller.excelHeight, constraintHeight));
                                       widget.controller.onPanUpdate(details,areaSize);
-                                    },
-                                    onPanEnd: widget.controller.onPanEnd,
+                                    }:null,
+                                    onPanEnd: widget.controller.selectedPosition!=null?widget.controller.onPanEnd:null,
                                     child: Stack(
                                       children: [
                                         Container(

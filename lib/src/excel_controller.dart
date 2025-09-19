@@ -86,6 +86,9 @@ class ExcelController extends ChangeNotifier {
   /// 多选变化回调
   Function(List<ExcelPosition> selectedItems)? onMultiSelectionChanged;
 
+  /// Excel尺寸变化回调
+  Function(Size size)? onExcelSizeChanged;
+
   ScrollController snHorizontalController = ScrollController();
   ScrollController snVerticalController = ScrollController();
   ScrollController excelHorizontalController = ScrollController();
@@ -144,6 +147,9 @@ class ExcelController extends ChangeNotifier {
   @override
   void dispose() {
     stopAutoScrollTimer();
+    onMultiSelectionChanged = null;
+    onPositionSelected = null;
+    onExcelSizeChanged = null;
     super.dispose();
   }
 }
@@ -307,6 +313,7 @@ extension ExcelSizeController on ExcelController{
     // 限制最小宽度
     if (newWidth < (minExcelColumnWidth??_defaultMinExcelColumnWidth)) newWidth = (minExcelColumnWidth??_defaultMinExcelColumnWidth);
     excel.customColumnWidths[columnIndex] = newWidth;
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
     update();
   }
 
@@ -317,6 +324,7 @@ extension ExcelSizeController on ExcelController{
     // 限制最小高度
     if (newHeight < (minExcelRowHeight??_defaultMinExcelRowHeight)) newHeight = (minExcelRowHeight??_defaultMinExcelRowHeight);
     excel.customRowHeights[rowIndex] = newHeight;
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
     update();
   }
 }
@@ -341,7 +349,6 @@ extension GestureDragController on ExcelController{
     if(!excel.isEnableMultipleSelection){
       return;
     }
-    _selectedPosition = null;
     _isMultiSelecting = true;
     _startPoint = details.localPosition;
     _lastPoint = _startPoint;
@@ -370,6 +377,7 @@ extension GestureDragController on ExcelController{
     // 停止自动滚动定时器
     stopAutoScrollTimer();
     if (!_isMultiSelecting) return;
+    _selectedPosition = null;
     _isMultiSelecting = false;
     if(_selectStartOffset!=null&&_selectEndOffset!=null){
       _selectionRect = Rect.fromPoints(_selectStartOffset!, _selectEndOffset!);
