@@ -6,11 +6,10 @@ import 'dart:async';
 import 'widget/excel_line.dart';
 
 /// Excel列和行最小宽度
-const double kMinExcelColumnWidth = 5.0;
-const double kMinExcelRowHeight = 5.0;
-/// 定义常量
-const double autoScrollThreshold = 20.0; // 触发自动滚动的距离阈值
-const double maxAutoScrollSpeed = 20.0; // 最大自动滚动速度
+const double _defaultMinExcelColumnWidth = 5.0;
+const double _defaultMinExcelRowHeight = 5.0;
+const double _defaultAutoScrollThreshold = 20.0; // 触发自动滚动的距离阈值
+const double _defaultMaxAutoScrollSpeed = 20.0; // 最大自动滚动速度
 /// Excel控制器，用于管理Excel组件的状态和操作
 /// 继承ChangeNotifier以支持widget刷新
 class ExcelController extends ChangeNotifier {
@@ -32,6 +31,14 @@ class ExcelController extends ChangeNotifier {
 
   /// 是否自动销毁控制器
   bool isAutoDispose;
+
+  ///Excel列和行最小宽度
+  double? minExcelColumnWidth;
+  double? minExcelRowHeight;
+  ///最大自动滚动速度
+  double? maxAutoScrollSpeed;
+  ///触发自动滚动的距离阈值
+  double? autoScrollThreshold;
 
   /// 选中的单元格位置
   ExcelPosition? _selectedPosition;
@@ -88,6 +95,10 @@ class ExcelController extends ChangeNotifier {
     required ExcelModel excel,
     List<ExcelItemModel>? items,
     this.isAutoDispose = true,
+    this.minExcelColumnWidth,
+    this.minExcelRowHeight,
+    this.maxAutoScrollSpeed,
+    this.autoScrollThreshold,
   })  : _excel = excel,
         _items = items ?? [];
 
@@ -168,6 +179,16 @@ extension ExcelDataController on ExcelController {
 
   /// 清除所有选中项
   void clearSelection() {
+    _selectedPosition = null;
+    _selectedItems.clear();
+    _selectionRect = null;
+    _selectStartOffset = null;
+    _selectEndOffset = null;
+    update();
+  }
+
+  /// 清除多选项
+  void clearMultipleSelected() {
     _selectedItems.clear();
     _selectionRect = null;
     _selectStartOffset = null;
@@ -284,7 +305,7 @@ extension ExcelSizeController on ExcelController{
     double currentWidth = getColumnWidth(columnIndex);
     double newWidth = currentWidth + delta;
     // 限制最小宽度
-    if (newWidth < kMinExcelColumnWidth) newWidth = kMinExcelColumnWidth;
+    if (newWidth < (minExcelColumnWidth??_defaultMinExcelColumnWidth)) newWidth = (minExcelColumnWidth??_defaultMinExcelColumnWidth);
     excel.customColumnWidths[columnIndex] = newWidth;
     update();
   }
@@ -294,7 +315,7 @@ extension ExcelSizeController on ExcelController{
     double currentHeight = getRowHeight(rowIndex);
     double newHeight = currentHeight + delta;
     // 限制最小高度
-    if (newHeight < kMinExcelRowHeight) newHeight = kMinExcelRowHeight;
+    if (newHeight < (minExcelRowHeight??_defaultMinExcelRowHeight)) newHeight = (minExcelRowHeight??_defaultMinExcelRowHeight);
     excel.customRowHeights[rowIndex] = newHeight;
     update();
   }
@@ -717,7 +738,6 @@ extension RowColumnInsertDeleteController on ExcelController {
       }
     }
     _items = updatedItems;
-    _selectedPosition = null;
     clearSelection();
   }
 
@@ -809,7 +829,6 @@ extension RowColumnInsertDeleteController on ExcelController {
       }
     }
     _items = updatedItems;
-    _selectedPosition = null;
     clearSelection();
   }
 }
@@ -829,6 +848,7 @@ extension AutoScrollController on ExcelController {
     double maxVerticalOffset = excelVerticalController.position.maxScrollExtent;
 
     bool scrolled = false;
+    var autoScrollThreshold = this.autoScrollThreshold??_defaultAutoScrollThreshold;
     // 水平方向自动滚动
     if (_currentPoint.dx - currentHorizontalOffset < autoScrollThreshold && currentHorizontalOffset > 0) {
       scrolled = true;
@@ -876,7 +896,8 @@ extension AutoScrollController on ExcelController {
     double maxVerticalOffset = excelVerticalController.position.maxScrollExtent;
 
     bool scrolled = false;
-
+    var autoScrollThreshold = this.autoScrollThreshold??_defaultAutoScrollThreshold;
+    var maxAutoScrollSpeed = this.maxAutoScrollSpeed??_defaultMaxAutoScrollSpeed;
     // 水平方向自动滚动
     if (_currentPoint.dx - currentHorizontalOffset < autoScrollThreshold && currentHorizontalOffset > 0) {
       // 向左滚动

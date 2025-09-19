@@ -227,7 +227,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                                         if (widget.controller.selectionRect != null)
                                           Listener(
                                             onPointerDown: (_) {
-                                              widget.controller.clearSelection();
+                                              widget.controller.clearMultipleSelected();
                                             },
                                             behavior: HitTestBehavior.translucent,
                                             child: SizedBox(
@@ -466,7 +466,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
           child: GestureDetector(
             behavior: HitTestBehavior.translucent,
             onTap: () {
-              widget.controller.clearSelection();
+              widget.controller.clearMultipleSelected();
               widget.controller.selectPosition(position);
             },
             child: Stack(
