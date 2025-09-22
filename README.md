@@ -1,6 +1,6 @@
 # Excel Table Plus
 
-[![](https://img.shields.io/badge/excel__table__plus-0.0.2-blue)](https://pub.dartlang.org/packages/excel_table_plus)
+[![](https://img.shields.io/badge/excel__table__plus-0.0.3-blue)](https://pub.dartlang.org/packages/excel_table_plus)
 ![](https://img.shields.io/badge/Awesome-Flutter-blue)
 ![](https://img.shields.io/badge/Platform-Android_iOS_Web_Windows_MacOS_Linux-blue)
 ![](https://img.shields.io/badge/License-MIT-blue)
