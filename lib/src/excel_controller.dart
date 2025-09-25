@@ -359,6 +359,34 @@ extension ExcelSizeController on ExcelController{
     onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
     update();
   }
+
+  /// 将所有列宽平均分配为总宽度的均值
+  void distributeColumnWidthsEqually() {
+    // 计算当前所有列宽的总和
+    double totalWidth = excel.customColumnWidths.fold(0, (sum, width) => sum + width);
+    // 计算平均宽度
+    double averageWidth = totalWidth / excel.customColumnWidths.length;
+    // 将每列宽度设置为平均宽度
+    for (int i = 0; i < excel.customColumnWidths.length; i++) {
+      excel.customColumnWidths[i] = averageWidth;
+    }
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
+  
+  /// 将所有行高平均分配为总高度的均值
+  void distributeRowHeightsEqually() {
+    // 计算当前所有行高的总和
+    double totalHeight = excel.customRowHeights.fold(0, (sum, height) => sum + height);
+    // 计算平均高度
+    double averageHeight = totalHeight / excel.customRowHeights.length;
+    // 将每行高度设置为平均高度
+    for (int i = 0; i < excel.customRowHeights.length; i++) {
+      excel.customRowHeights[i] = averageHeight;
+    }
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
 }
 
 /// 控制器手势拖拽管理扩展
