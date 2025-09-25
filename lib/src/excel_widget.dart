@@ -153,6 +153,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                 child: ScrollbarTheme(
                   data: const ScrollbarThemeData(
                     thickness: WidgetStatePropertyAll(0.0),
+                    interactive: false
                   ),
                   child: SizedBox(
                     width: min(totalExcelWidth, constraintWidth),
@@ -332,7 +333,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
       if (excel.dividerWidth > 0) {
         final verticalLine = Positioned(
           left: left -
-              (widget.controller.isDragging ? (itemWidth - excel.dividerWidth) / 2 : 0),
+              (widget.controller.isDragging ? (itemWidth - excel.dividerWidth) / 2 : 0) - (i==excel.x?1:0),
           top: 0.0,
           child: Container(
             width: widget.controller.isDragging ? itemWidth : excel.dividerWidth,
@@ -368,7 +369,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
         final horizontalLine = Positioned(
           left: 0.0,
           top: top -
-              (widget.controller.isDragging ? (itemHeight - excel.dividerWidth) / 2 : 0),
+              (widget.controller.isDragging ? (itemHeight - excel.dividerWidth) / 2 : 0) - (i==excel.y?1:0),
           child: Container(
             height: widget.controller.isDragging ? itemHeight : excel.dividerWidth,
             alignment: Alignment.center,
@@ -485,22 +486,28 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                       ignoring: (widget.controller.selectedPosition != position||(model?.isReadOnly??false)),
                       child: _itemContentBuilder(excel, x, y, model)),
                 ),
-                if(x<excel.x-1)
-                  Positioned(right: -excel.dividerWidth,child: IgnorePointer(
+                Positioned(
+                  left: -excel.dividerWidth,
+                  top: -excel.dividerWidth,
+                  child: IgnorePointer(
                     child: Container(
-                      width: excel.dividerWidth,
-                      height: height + (y<excel.y-1?excel.dividerWidth:0),
-                      color: excel.dividerColor??Colors.transparent,
+                      width: width+excel.dividerWidth*2,
+                      height: height+excel.dividerWidth*2,
+                      decoration: BoxDecoration(
+                        border: Border(
+                          right: BorderSide(
+                            color: excel.dividerColor??Colors.transparent,
+                            width: excel.dividerWidth,
+                          ),
+                          bottom: BorderSide(
+                            color: excel.dividerColor??Colors.transparent,
+                            width: excel.dividerWidth,
+                          ),
+                        ),
+                      ),
                     ),
-                  )),
-                if(y<excel.y-1)
-                  Positioned(bottom: -excel.dividerWidth,child: IgnorePointer(
-                    child: Container(
-                      width: width+(x<excel.x-1?excel.dividerWidth:0),
-                      height: excel.dividerWidth,
-                      color: excel.dividerColor??Colors.transparent,
-                    ),
-                  )),
+                  ),
+                ),
                 IgnorePointer(
                   child: Container(
                     width: width,

@@ -1,6 +1,6 @@
 name: excel_table_plus
 description: "An enhanced Excel-style table widget for Flutter with advanced features like cell merging, resizing, styling, and more."
-version: 0.0.3
+version: 0.0.4
 homepage: https://github.com/bg-1998/excel_table_plus
 
 environment:
