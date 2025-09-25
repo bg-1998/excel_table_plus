@@ -149,7 +149,12 @@ class _ExcelWidgetState extends State<ExcelWidget> {
             clipBehavior: Clip.none,
             children: [
               ClipRRect(
-                borderRadius: BorderRadius.circular(excel.borderRadius),
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(excel.borderRadiusTL),
+                  topRight: Radius.circular(excel.borderRadiusTR),
+                  bottomLeft: Radius.circular(excel.borderRadiusBL),
+                  bottomRight: Radius.circular(excel.borderRadiusBR),
+                ),
                 child: ScrollbarTheme(
                   data: const ScrollbarThemeData(
                     thickness: WidgetStatePropertyAll(0.0),
@@ -276,7 +281,12 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                   width: min(totalExcelWidth, constraintWidth),
                   height: min(totalExcelHeight, constraintHeight),
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(excel.borderRadius),
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(excel.borderRadiusTL),
+                      topRight: Radius.circular(excel.borderRadiusTR),
+                      bottomLeft: Radius.circular(excel.borderRadiusBL),
+                      bottomRight: Radius.circular(excel.borderRadiusBR),
+                    ),
                     border: Border.all(
                       color: (excel.borderColor ?? excel.dividerColor)??Colors.transparent,
                       width: excel.borderWidth,

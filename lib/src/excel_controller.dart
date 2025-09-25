@@ -499,6 +499,7 @@ extension MergeCellController on ExcelController {
       _selectedItems.clear();
       _selectedItems.add(firstPosition);
       _selectedPosition = newItem.position;
+      onMultiSelectionChanged?.call(_selectedItems);
       update();
     }
   }
@@ -514,6 +515,7 @@ extension MergeCellController on ExcelController {
     }
     _items.remove(model);
     _selectedPosition = model.position;
+    onPositionSelected?.call(_selectedPosition);
     update();
   }
 

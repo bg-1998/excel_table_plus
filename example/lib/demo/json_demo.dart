@@ -30,7 +30,10 @@ class _JsonDemoState extends State<JsonDemo> {
       rowColor: Colors.blue.withValues(alpha: 0.1),
       dividerWidth: 1.0,
       resizable: true,
-      borderRadius: 8.0,
+      borderRadiusTL: 8.0,
+      borderRadiusTR: 8.0,
+      borderRadiusBL: 8.0,
+      borderRadiusBR: 8.0,
       borderWidth: 2
     );
 

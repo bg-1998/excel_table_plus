@@ -148,7 +148,10 @@ class _TemplateDemoState extends State<TemplateDemo> {
       selectedBorderWidth: 2,
       dividerWidth: dividerWidth ?? 1.0,
       dividerColor: dividerColor ?? Colors.grey.withValues(alpha: 0.3),
-      borderRadius: borderRadius ?? 0,
+      borderRadiusTL: borderRadius ?? 0,
+      borderRadiusTR: borderRadius ?? 0,
+      borderRadiusBL: borderRadius ?? 0,
+      borderRadiusBR: borderRadius ?? 0,
       resizable: false, // 模板不需要调整大小
       isEnableMultipleSelection: false,// 不允许多选
       borderWidth: borderWidth ?? 1,

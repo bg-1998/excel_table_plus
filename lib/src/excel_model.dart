@@ -24,7 +24,10 @@ class ExcelModel {
   Color? selectedBorderColor;// 选中单元格边框颜色
   double dividerWidth; // 分割线宽度
   double borderWidth; // 表格边线宽度
-  double borderRadius; // 表格边线圆角
+  double borderRadiusTL; // 表格边线左上圆角
+  double borderRadiusTR; // 表格边线右上角圆角
+  double borderRadiusBL; // 表格边线左下角圆角
+  double borderRadiusBR; // 表格边线右下角圆角
   Color? borderColor; // 表格边线颜色
 
   Color? rowColor; // 行颜色
@@ -54,7 +57,10 @@ class ExcelModel {
   /// [selectedBorderColor] 选中单元格边框颜色
   /// [dividerWidth] 分割线宽度
   /// [borderWidth] 表格边线宽度
-  /// [borderRadius] 表格边线圆角
+  /// [borderRadiusTL] 表格边线左上圆角
+  /// [borderRadiusTR] 表格边线右上圆角
+  /// [borderRadiusBL] 表格边线左下角圆角
+  /// [borderRadiusBR] 表格边线右下角圆角
   /// [borderColor] 表格边线颜色
   /// [rowColor] 行颜色
   /// [columnColor] 列颜色
@@ -84,7 +90,10 @@ class ExcelModel {
     this.selectedBorderColor,
     this.dividerWidth = 0.5,
     this.borderWidth = 0.5,
-    this.borderRadius = 0.0,
+    this.borderRadiusTL = 0.0,
+    this.borderRadiusTR = 0.0,
+    this.borderRadiusBL = 0.0,
+    this.borderRadiusBR = 0.0,
     this.borderColor,
     this.rowColor,
     this.columnColor,
@@ -116,7 +125,10 @@ class ExcelModel {
     json['selectedBorderColor'] = selectedBorderColor?.value;
     json['dividerWidth'] = dividerWidth;
     json['borderWidth'] = borderWidth;
-    json['borderRadius'] = borderRadius;
+    json['borderRadiusTL'] = borderRadiusTL;
+    json['borderRadiusTR'] = borderRadiusTR;
+    json['borderRadiusBL'] = borderRadiusBL;
+    json['borderRadiusBR'] = borderRadiusBR;
     json['borderColor'] = borderColor?.value;
     json['rowColor'] = rowColor?.value;
     json['columnColor'] = columnColor?.value;
@@ -148,7 +160,10 @@ class ExcelModel {
       selectedBorderWidth: json['selectedBorderWidth'] as double,
       selectedBorderColor: json['selectedBorderColor'] != null ? Color(json['selectedBorderColor'] as int) : null,
       dividerWidth: json['dividerWidth'] as double,
-      borderRadius: json['borderRadius'] as double,
+      borderRadiusTL: json['borderRadiusTL'] as double,
+      borderRadiusTR: json['borderRadiusTR'] as double,
+      borderRadiusBL: json['borderRadiusBL'] as double,
+      borderRadiusBR: json['borderRadiusBR'] as double,
       borderWidth: json['borderWidth'] as double,
       borderColor: json['borderColor'] != null ? Color(json['borderColor'] as int) : null,
       rowColor: json['rowColor'] != null ? Color(json['rowColor'] as int) : null,
@@ -337,7 +352,10 @@ extension ExcelModelCopyWith on ExcelModel {
     Color? selectedBorderColor,
     double? dividerWidth,
     double? borderWidth,
-    double? borderRadius,
+    double? borderRadiusTL,
+    double? borderRadiusTR,
+    double? borderRadiusBL,
+    double? borderRadiusBR,
     Color? borderColor,
     Color? rowColor,
     Color? columnColor,
@@ -363,7 +381,10 @@ extension ExcelModelCopyWith on ExcelModel {
       selectedBorderColor: selectedBorderColor ?? this.selectedBorderColor,
       dividerWidth: dividerWidth ?? this.dividerWidth,
       borderWidth: borderWidth ?? this.borderWidth,
-      borderRadius: borderRadius ?? this.borderRadius,
+      borderRadiusTL: borderRadiusTL ?? this.borderRadiusTL,
+      borderRadiusTR: borderRadiusTR ?? this.borderRadiusTR,
+      borderRadiusBL: borderRadiusBL ?? this.borderRadiusBL,
+      borderRadiusBR: borderRadiusBR ?? this.borderRadiusBR,
       borderColor: borderColor ?? this.borderColor,
       rowColor: rowColor ?? this.rowColor,
       columnColor: columnColor ?? this.columnColor,

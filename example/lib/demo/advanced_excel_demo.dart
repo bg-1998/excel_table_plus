@@ -43,7 +43,10 @@ class _AdvancedExcelDemoState extends State<AdvancedExcelDemo> {
       columnColor: Colors.indigo.withValues(alpha: 0.02), // 列背景色
       dividerWidth: 0.5, // 分割线宽度
       dividerColor: Colors.grey.withValues(alpha: 0.3),
-      borderRadius: 8.0, // 表格边框圆角
+      borderRadiusTL: 8.0,
+      borderRadiusTR: 8.0,
+      borderRadiusBL: 8.0,
+      borderRadiusBR: 8.0,
       resizable: true, // 允许调整大小
       resizeAreaSize: 8.0,
       alignment: Alignment.center, // 居中对齐
@@ -340,7 +343,10 @@ class _AdvancedExcelDemoState extends State<AdvancedExcelDemo> {
     _controller.excel.itemWidth = _controller.startScaleExcel!.itemWidth * newScale;
     _controller.excel.itemHeight = _controller.startScaleExcel!.itemHeight * newScale;
     _controller.excel.dividerWidth = _controller.startScaleExcel!.dividerWidth * newScale;
-    _controller.excel.borderRadius = _controller.startScaleExcel!.borderRadius * newScale;
+    _controller.excel.borderRadiusTL = _controller.startScaleExcel!.borderRadiusTL * newScale;
+    _controller.excel.borderRadiusTR = _controller.startScaleExcel!.borderRadiusTR * newScale;
+    _controller.excel.borderRadiusBL = _controller.startScaleExcel!.borderRadiusBL * newScale;
+    _controller.excel.borderRadiusBR = _controller.startScaleExcel!.borderRadiusBR * newScale;
     _controller.excel.resizeAreaSize = _controller.startScaleExcel!.resizeAreaSize * newScale;
     _controller.excel.customColumnWidths = _controller.startScaleExcel!.customColumnWidths.map((width) => width * newScale)
         .toList();
