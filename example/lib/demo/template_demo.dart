@@ -59,7 +59,7 @@ class _TemplateDemoState extends State<TemplateDemo> {
       templateName: '明显网格',
       backgroundColor: Colors.white,
       rowColor: Colors.grey.withValues(alpha: 0.05),
-      dividerWidth: 2.0,
+      dividerWidth: 20.0,
       dividerColor: Colors.grey,
     ));
 

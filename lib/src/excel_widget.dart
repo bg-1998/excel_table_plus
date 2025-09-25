@@ -344,7 +344,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
                 highlightColor: excel.selectedBorderColor??Theme.of(context).primaryColor,
-                length: totalHeight - excel.dividerWidth,
+                length: totalHeight,
                 resizable: excel.resizable && i > 0,
                 index: i,
                 onResize: excel.resizable && i > 0
@@ -378,7 +378,7 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                 thickness: excel.dividerWidth,
                 color: Colors.transparent,
                 highlightColor: excel.selectedBorderColor??Theme.of(context).primaryColor,
-                length: totalWidth - excel.dividerWidth,
+                length: totalWidth,
                 axis: ExcelLineAxis.horizontal,
                 resizable: excel.resizable && i > 0,
                 index: i,

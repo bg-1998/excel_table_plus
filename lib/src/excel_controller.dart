@@ -306,6 +306,24 @@ extension ExcelSizeController on ExcelController{
     return excel.itemHeight;
   }
 
+  /// 设置列宽
+  void setColumnWidth(int columnIndex, double width) {
+    if(columnIndex>-1&&columnIndex<excel.customColumnWidths.length){
+      excel.customColumnWidths[columnIndex] = width;
+    }
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
+
+  /// 设置行高
+  void setRowHeight(int rowIndex, double height) {
+    if(rowIndex>-1&&rowIndex<excel.customRowHeights.length){
+      excel.customRowHeights[rowIndex] = height;
+    }
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
+
   /// 处理列宽调整
   void onColumnResize(int columnIndex, double delta) {
     double currentWidth = getColumnWidth(columnIndex);
@@ -324,6 +342,20 @@ extension ExcelSizeController on ExcelController{
     // 限制最小高度
     if (newHeight < (minExcelRowHeight??_defaultMinExcelRowHeight)) newHeight = (minExcelRowHeight??_defaultMinExcelRowHeight);
     excel.customRowHeights[rowIndex] = newHeight;
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
+
+  /// 设置分割线宽度
+  void setDividerWidth(double width) {
+    excel.dividerWidth = width;
+    onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
+    update();
+  }
+
+  /// 设置边框宽度
+  void setBorderWidth(double width) {
+    excel.borderWidth = width;
     onExcelSizeChanged?.call(Size(getExcelWidth(), getExcelHeight()));
     update();
   }
