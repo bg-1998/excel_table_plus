@@ -32,8 +32,7 @@ class _ExcelTableDemoState extends State<ExcelTableDemo> {
       showSn: true, // 显示序号
       backgroundColor: Colors.white,
       rowColor: Colors.blue.withValues(alpha: 0.1), // 行背景色
-      dividerWidth: 10.0, // 分割线宽度
-      dividerColor: Colors.blue,
+      dividerWidth: 1, // 分割线宽度
       resizable: true, // 允许调整大小
       borderRadiusTL: 8,
       borderRadiusTR: 8,

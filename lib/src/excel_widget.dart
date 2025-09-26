@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:excel_table_plus/src/ext/ext.dart';
 import 'package:excel_table_plus/src/widget/excel_line.dart';
+import 'package:excel_table_plus/src/widget/excel_cell_border_painter.dart';
 import 'package:excel_table_plus/src/excel_controller.dart';
 import 'excel_model.dart';
 
@@ -496,24 +497,15 @@ class _ExcelWidgetState extends State<ExcelWidget> {
                       ignoring: (widget.controller.selectedPosition != position||(model?.isReadOnly??false)),
                       child: _itemContentBuilder(excel, x, y, model)),
                 ),
-                Positioned(
-                  left: -excel.dividerWidth,
-                  top: -excel.dividerWidth,
-                  child: IgnorePointer(
-                    child: Container(
-                      width: width+excel.dividerWidth*2,
-                      height: height+excel.dividerWidth*2,
-                      decoration: BoxDecoration(
-                        border: Border(
-                          right: BorderSide(
-                            color: excel.dividerColor??Colors.transparent,
-                            width: excel.dividerWidth,
-                          ),
-                          bottom: BorderSide(
-                            color: excel.dividerColor??Colors.transparent,
-                            width: excel.dividerWidth,
-                          ),
-                        ),
+                IgnorePointer(
+                  child: SizedBox(
+                    width: width,
+                    height: height,
+                    child: CustomPaint(
+                      size: Size(width, height),
+                      painter: ExcelCellBorderPainter(
+                        borderColor: excel.dividerColor??Colors.transparent,
+                        borderWidth: excel.dividerWidth,
                       ),
                     ),
                   ),
